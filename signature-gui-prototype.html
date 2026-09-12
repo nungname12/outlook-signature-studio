@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signature Studio — UI Prototype</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #6e7890;
+      --line: #e5e9f0;
+      --paper: #ffffff;
+      --wash: #f5f7fb;
+      --navy: #142442;
+      --blue: #2d6cdf;
+      --cyan: #5dc4d6;
+      --lime: #c8e66b;
+      --orange: #ffb65b;
+      --shadow: 0 16px 50px rgba(21, 36, 66, .11);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef2f8;
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; }
+    .topbar {
+      height: 76px; padding: 0 34px; display: flex; align-items: center;
+      justify-content: space-between; color: #fff; background: var(--navy);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 35px; height: 35px; border-radius: 11px; display: grid; place-items: center; background: var(--lime); color: var(--navy); font-weight: 900; }
+    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -.2px; }
+    .brand-sub { color: #aab6ca; font-size: 11px; margin-top: 1px; }
+    .top-actions { display: flex; gap: 9px; align-items: center; }
+    .profile-pill { display: flex; gap: 8px; align-items: center; color: #dfe6f4; font-size: 12px; padding-right: 9px; }
+    .avatar { width: 29px; height: 29px; border-radius: 50%; display: grid; place-items: center; background: #3265b6; color: white; font-weight: 800; }
+    .top-button { border: 1px solid #3d4d6d; background: transparent; color: #f7f9fc; border-radius: 10px; padding: 8px 12px; }
+    .top-button:hover { background: #253653; }
+    .shell { padding: 30px 34px 110px; max-width: 1500px; margin: auto; }
+    .page-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 25px; }
+    .eyebrow { color: var(--blue); font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 28px; line-height: 1.1; letter-spacing: -1px; margin-top: 5px; }
+    .lede { color: var(--muted); max-width: 620px; margin-top: 8px; }
+    .page-actions { display: flex; gap: 9px; }
+    .btn { border: 1px solid var(--line); background: var(--paper); color: var(--ink); padding: 10px 14px; border-radius: 11px; font-weight: 700; box-shadow: 0 3px 12px rgba(18, 38, 72, .03); }
+    .btn:hover { border-color: #bac7dd; transform: translateY(-1px); }
+    .btn.primary { color: #fff; border-color: var(--blue); background: var(--blue); }
+    .btn.soft { border-color: #d7e1ff; color: #255cc3; background: #edf3ff; }
+    .btn.danger { color: #a43a47; background: #fff5f5; border-color: #f2d5d9; }
+    .badge { border-radius: 99px; padding: 5px 9px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; }
+    .badge.green { color: #477a27; background: #eef8d9; }
+    .badge.blue { color: #2759ac; background: #eaf1ff; }
+    .badge.orange { color: #9b621e; background: #fff3dd; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .panel { background: var(--paper); border: 1px solid rgba(222, 228, 239, .9); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+    .panel-title { font-weight: 850; }
+    .hint { color: var(--muted); font-size: 12px; }
+    .form-layout { display: grid; grid-template-columns: 205px minmax(320px, 1fr) minmax(410px, 1.2fr); gap: 16px; align-items: start; }
+    .template-list { padding: 11px; }
+    .template-item { padding: 13px; border: 1px solid transparent; border-radius: 14px; margin-bottom: 5px; cursor: pointer; }
+    .template-item:hover { background: #f5f8fd; }
+    .template-item.active { color: #224c9d; background: #edf3ff; border-color: #d8e5ff; }
+    .template-item strong { display: block; font-size: 13px; }
+    .template-item small { color: var(--muted); display: block; margin-top: 3px; }
+    .template-item.active small { color: #5d76a8; }
+    .new-template { margin: 10px 7px 5px; width: calc(100% - 14px); border: 1px dashed #b9c7dc; background: transparent; color: #365a9d; padding: 9px; border-radius: 10px; font-weight: 700; }
+    .fields-panel { padding-bottom: 18px; }
+    .fields { padding: 18px 20px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field.full { grid-column: 1 / -1; }
+    label { display: block; color: #5e6980; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .65px; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; border: 1px solid #dce3ef; border-radius: 10px; padding: 10px 11px; color: var(--ink); background: #fbfcfe; outline: none; transition: .15s; }
+    input:focus, textarea:focus, select:focus { border-color: #7ea5ee; box-shadow: 0 0 0 3px rgba(45, 108, 223, .12); background: #fff; }
+    textarea { resize: vertical; min-height: 54px; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 20px 0; }
+    .toggle-copy strong { display: block; font-size: 13px; }
+    .toggle-copy span { color: var(--muted); font-size: 12px; }
+    .toggle { width: 39px; height: 22px; border: 0; border-radius: 99px; padding: 3px; background: #c7d0df; }
+    .toggle i { display: block; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .2s; }
+    .toggle.on { background: var(--blue); }
+    .toggle.on i { transform: translateX(17px); }
+    .preview-panel { min-height: 520px; overflow: hidden; }
+    .preview-stage { min-height: 466px; padding: 32px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 25% 15%, #f9fbff, #edf1f7 75%); }
+    .email-window { width: min(100%, 650px); background: #fff; border: 1px solid #dce2eb; border-radius: 13px; box-shadow: 0 20px 35px rgba(39, 54, 87, .13); overflow: hidden; }
+    .email-toolbar { height: 37px; display: flex; align-items: center; gap: 6px; padding: 0 13px; background: #f8f9fb; border-bottom: 1px solid #e9edf3; }
+    .traffic { width: 8px; height: 8px; border-radius: 50%; background: #ffbe65; box-shadow: 14px 0 #7ed0b5, 28px 0 #b2b9c8; }
+    .email-body { padding: 19px; color: #334056; font: 13px/1.55 Georgia, serif; }
+    .email-body .to { font: 11px/1.4 Inter, sans-serif; color: #8b96a8; padding-bottom: 20px; }
+    .signature { border-top: 1px solid #cfd5df; padding-top: 11px; }
+    .signature .salute { margin-bottom: 2px; }
+    .signature .person { font-family: Arial, sans-serif; font-weight: 800; font-size: 16px; color: #162541; }
+    .signature .role { font-family: Arial, sans-serif; font-weight: 700; color: #313a4b; }
+    .signature .company { font-family: Arial, sans-serif; font-weight: 600; color: #313a4b; }
+    .signature .contact { margin-top: 14px; font-family: Arial, sans-serif; color: #394459; font-size: 12px; }
+    .signature a { color: #2658b1; text-decoration: underline; }
+    .preview-foot { padding: 11px 19px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    .small-actions { display: flex; gap: 7px; }
+    .small-btn { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 7px 9px; color: #516078; }
+    .small-btn:hover { background: #f5f8fc; }
+    .toast { position: fixed; top: 90px; right: 28px; background: var(--navy); color: white; border-radius: 12px; padding: 12px 15px; box-shadow: var(--shadow); opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .2s; z-index: 30; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .switcher { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: 4px; padding: 6px; border: 1px solid #46597b; border-radius: 16px; background: rgba(20, 36, 66, .97); box-shadow: 0 14px 30px rgba(12, 25, 49, .25); color: white; }
+    .switcher button { width: 31px; height: 31px; border: 0; border-radius: 10px; background: transparent; color: #c9d4e7; font-size: 19px; }
+    .switcher button:hover { background: #2d4266; color: white; }
+    .switcher-label { min-width: 210px; padding: 0 9px; text-align: center; font-size: 12px; }
+    .switcher-label strong { color: var(--lime); margin-right: 5px; }
+    .variant-note { color: #aebbd1; font-size: 10px; }
+    .prototype-banner { background: #fff8e9; border-bottom: 1px solid #f0dfb6; color: #76531f; padding: 8px 34px; font-size: 12px; display: flex; justify-content: space-between; gap: 15px; }
+    .kbd { border: 1px solid #dcc998; border-bottom-width: 2px; padding: 1px 5px; border-radius: 4px; font-size: 10px; background: #fffdf8; }
+
+    /* Variant B: guided wizard */
+    .wizard-layout { display: grid; grid-template-columns: 245px 1fr; gap: 16px; align-items: start; }
+    .steps { padding: 21px; }
+    .step { display: flex; gap: 11px; padding: 13px 0; color: #8b96a8; }
+    .step + .step { border-top: 1px solid var(--line); }
+    .step-number { flex: 0 0 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1px solid #d5dce8; font-size: 11px; font-weight: 800; }
+    .step.active { color: var(--ink); }
+    .step.active .step-number { color: white; background: var(--blue); border-color: var(--blue); }
+    .step.done .step-number { color: #4f7c2b; background: #eff8d7; border-color: #d8ecb4; }
+    .step strong { display: block; font-size: 13px; }
+    .step span { display: block; font-size: 11px; margin-top: 2px; }
+    .wizard-main { padding: 24px 27px 27px; }
+    .progress { height: 7px; border-radius: 99px; background: #edf0f5; margin: 20px 0 26px; overflow: hidden; }
+    .progress i { display: block; height: 100%; width: 66%; background: linear-gradient(90deg, var(--blue), var(--cyan)); border-radius: inherit; }
+    .wizard-form { max-width: 710px; }
+    .wizard-form h2 { font-size: 22px; letter-spacing: -.5px; margin-bottom: 6px; }
+    .wizard-form .sub { color: var(--muted); margin-bottom: 20px; }
+    .wizard-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .wizard-nav { display: flex; justify-content: space-between; border-top: 1px solid var(--line); margin-top: 25px; padding-top: 19px; }
+    .wizard-preview { margin-top: 24px; padding-top: 22px; border-top: 1px dashed #d4dce9; }
+    .wizard-preview .preview-stage { min-height: 250px; border-radius: 14px; padding: 20px; }
+    .wizard-preview .email-body { padding: 13px; }
+
+    /* Variant C: canvas */
+    .canvas-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
+    .canvas-column { display: flex; flex-direction: column; gap: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stat { padding: 15px; background: #fff; border: 1px solid var(--line); border-radius: 15px; }
+    .stat strong { display: block; font-size: 22px; letter-spacing: -.5px; }
+    .stat span { color: var(--muted); font-size: 11px; }
+    .canvas-card { padding: 21px; }
+    .canvas-card h2 { font-size: 17px; }
+    .mini-template { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .mini-template:last-child { border-bottom: 0; }
+    .mini-left { display: flex; gap: 11px; align-items: center; }
+    .mini-icon { width: 35px; height: 35px; border-radius: 10px; display: grid; place-items: center; font-weight: 900; color: #244e96; background: #eaf2ff; }
+    .mini-template strong { font-size: 13px; display: block; }
+    .mini-template small { color: var(--muted); }
+    .canvas-preview { min-height: 521px; }
+    .canvas-preview .preview-stage { min-height: 421px; }
+    .canvas-preview .panel-head { background: #fbfcfe; }
+    .quick-edit { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .quick-edit button { border: 1px solid #dce3ef; background: #fff; color: #4c5d7a; border-radius: 9px; padding: 8px 10px; font-size: 12px; }
+    .quick-edit button:hover { border-color: #91afe7; color: #2858aa; }
+
+    @media (max-width: 1050px) {
+      .form-layout { grid-template-columns: 180px 1fr; }
+      .preview-panel { grid-column: 1 / -1; }
+      .canvas-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .topbar, .shell, .prototype-banner { padding-left: 17px; padding-right: 17px; }
+      .topbar { height: auto; padding-top: 14px; padding-bottom: 14px; gap: 12px; }
+      .profile-pill, .top-button { display: none; }
+      .page-head { display: block; }
+      .page-actions { margin-top: 15px; }
+      .form-layout, .wizard-layout { grid-template-columns: 1fr; }
+      .fields, .wizard-fields { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .switcher-label { min-width: 145px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="prototype-banner">
+      <span><strong>PROTOTYPE</strong> — ข้อมูลจะอยู่ในหน่วยความจำของหน้านี้เท่านั้น ยังไม่เขียนลง Outlook จริง</span>
+      <span>สลับแบบด้วย <span class="kbd">←</span> <span class="kbd">→</span></span>
+    </div>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">S</div>
+        <div><div class="brand-title">Signature Studio</div><div class="brand-sub">Outlook signature manager</div></div>
+      </div>
+      <div class="top-actions">
+        <div class="profile-pill"><div class="avatar">IT</div><span>IT Helpdesk</span></div>
+        <button class="top-button" onclick="showToast('เปิดตัวช่วยตั้งค่าบัญชี (ตัวอย่าง)')">Help</button>
+        <button class="top-button" onclick="showToast('ระบบพร้อมใช้งานในโหมด Prototype')">● Online</button>
+      </div>
+    </header>
+    <main id="main"></main>
+    <div id="toast" class="toast"></div>
+    <nav class="switcher" aria-label="Prototype variants">
+      <button onclick="cycle(-1)" aria-label="Previous variant">‹</button>
+      <div class="switcher-label" id="switcherLabel"></div>
+      <button onclick="cycle(1)" aria-label="Next variant">›</button>
+    </nav>
+  </div>
+  <script>
+    const defaults = {
+      greeting: 'Best regards,',
+      name: 'IT Helpdesk (BIT)',
+      role: 'Helpdesk & Service',
+      company: 'Belton Industrial (Thailand) Ltd. - Navanakorn & Rojana',
+      group: 'Belton Technology Group',
+      phone: '(66) 2529 7300',
+      ext: '830-1313/831-3313',
+      mobile: '',
+      email: 'bit-it.helpdesk@beltontechnology.com',
+      website: 'www.beltontechnology.com',
+      account: 'IT Helpdesk',
+      defaultNew: true,
+      defaultReply: true
+    };
+    const state = { ...defaults };
+    const variants = [
+      { key: 'A', name: 'Form-first', desc: 'จัดการข้อมูลและเห็นผลลัพธ์พร้อมกัน' },
+      { key: 'B', name: 'Guided wizard', desc: 'เหมาะกับผู้ใช้ที่สร้าง Signature ครั้งแรก' },
+      { key: 'C', name: 'Canvas dashboard', desc: 'เหมาะกับทีมที่ดูแลหลาย Template' }
+    ];
+    let variant = new URLSearchParams(location.search).get('variant') || 'B';
+    if (!variants.some(v => v.key === variant)) variant = 'A';
+    let toastTimer;
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    }
+    function signatureMarkup() {
+      return `<div class="signature"><div class="salute">${esc(state.greeting)}</div><div class="person">${esc(state.name)}${state.role ? ` <span style="font-weight:400">| ${esc(state.role)}</span>` : ''}${state.company ? ` <span style="font-weight:400">| ${esc(state.company)}</span>` : ''}</div><div class="company" style="margin-top:12px">${esc(state.group)}</div><div class="contact">Direct Line: ${esc(state.phone)} &nbsp;|&nbsp; Ext.: ${esc(state.ext)}${state.mobile ? `<br>Mobile: ${esc(state.mobile)}` : ''}<br>Email: <a href="mailto:${esc(state.email)}">${esc(state.email)}</a><br>Website: <a href="https://${esc(state.website)}">${esc(state.website)}</a></div></div>`;
+    }
+    function preview(compact = false) {
+      return `<div class="email-window"><div class="email-toolbar"><span class="traffic"></span></div><div class="email-body"><div class="to">To: customer@example.com<br>Subject: Service request follow-up</div><div>Hello,</div><div style="margin-top:6px">Thank you for contacting our support team. We will get back to you shortly.</div>${signatureMarkup()}</div></div>`;
+    }
+    function field(id, label, full = false, type = 'text') {
+      return `<div class="field ${full ? 'full' : ''}"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(state[id])}" oninput="updateField('${id}', this.value)" /></div>`;
+    }
+    function formFields() {
+      return `${field('name','ชื่อผู้ใช้งาน')}${field('role','ตำแหน่ง / แผนก')}${field('company','บริษัท',true)}${field('group','กลุ่มบริษัท')}${field('phone','Direct Line')}${field('ext','Extension')}${field('mobile','Mobile')}${field('email','Email','', 'email')}${field('website','Website')}`;
+    }
+    function commonHead(kicker, title, copy) {
+      return `<div class="page-head"><div><div class="eyebrow">${kicker}</div><h1>${title}</h1><p class="lede">${copy}</p></div><div class="page-actions"><button class="btn" onclick="newTemplate()">＋ New template</button><button class="btn primary" onclick="saveTemplate()">Save signature</button></div></div>`;
+    }
+    function renderA() {
+      return `${commonHead('Variant A · Form-first','Create your signature','กรอกข้อมูลครั้งเดียว แล้วดูหน้าตา Signature ที่จะปรากฏในอีเมลแบบ Real-time')}
+        <section class="form-layout">
+          <aside class="panel template-list"><div class="panel-head" style="padding:13px 10px"><span class="panel-title">Templates</span><span class="badge blue">3</span></div>
+            <div class="template-item active"><strong>IT Helpdesk</strong><small>Updated just now</small></div>
+            <div class="template-item"><strong>Sales Team</strong><small>Last edited 2 days ago</small></div>
+            <div class="template-item"><strong>Management</strong><small>Last edited 1 week ago</small></div>
+            <button class="new-template" onclick="newTemplate()">＋ New template</button>
+          </aside>
+          <section class="panel fields-panel"><div class="panel-head"><div><div class="panel-title">Signature details</div><div class="hint">ใช้ข้อมูลนี้สร้าง HTML Signature</div></div><span class="badge green"><span class="dot"></span> Auto preview</span></div>
+            <div class="fields">${field('greeting','คำขึ้นต้น',true)}${formFields()}</div>
+            <div class="toggle-row"><div class="toggle-copy"><strong>Use for new messages</strong><span>ตั้งเป็น Signature เริ่มต้นสำหรับอีเมลใหม่</span></div><button class="toggle ${state.defaultNew ? 'on' : ''}" onclick="toggleField('defaultNew', this)"><i></i></button></div>
+            <div class="toggle-row"><div class="toggle-copy"><strong>Use for replies & forwards</strong><span>ใช้กับ Reply และ Forward อัตโนมัติ</span></div><button class="toggle ${state.defaultReply ? 'on' : ''}" onclick="toggleField('defaultReply', this)"><i></i></button></div>
+          </section>
+          <section class="panel preview-panel"><div class="panel-head"><div><div class="panel-title">Live preview</div><div class="hint">Outlook · New message</div></div><span class="badge orange">HTML</span></div><div class="preview-stage">${preview()}</div><div class="preview-foot"><span class="hint">Changes are shown instantly</span><div class="small-actions"><button class="small-btn" onclick="copyHtml()">Copy HTML</button><button class="small-btn" onclick="showToast('เปิด Outlook เพื่อทดสอบ (ตัวอย่าง)')">Test in Outlook ↗</button></div></div></section>
+        </section>`;
+    }
+    function renderB() {
+      return `${commonHead('Variant B · Guided setup','Build it in 3 steps','แนวทางแบบ Wizard ช่วยลดความซับซ้อนสำหรับผู้ใช้ที่สร้าง Signature ครั้งแรก')}
+        <section class="wizard-layout"><aside class="panel steps"><div class="panel-title" style="margin-bottom:10px">Setup progress</div><div class="step done"><div class="step-number">✓</div><div><strong>Choose template</strong><span>IT Helpdesk</span></div></div><div class="step active"><div class="step-number">2</div><div><strong>Personal details</strong><span>ข้อมูลที่จะแสดงในอีเมล</span></div></div><div class="step"><div class="step-number">3</div><div><strong>Apply to Outlook</strong><span>ตั้งค่าและทดลองใช้งาน</span></div></div><div style="margin-top:20px;padding-top:17px;border-top:1px solid var(--line)"><div class="hint">Current account</div><strong style="display:block;margin-top:4px">${esc(state.account)}</strong><span class="badge green" style="margin-top:9px"><span class="dot"></span> Connected</span></div></aside>
+          <section class="panel wizard-main"><div class="wizard-form"><h2>Tell us about this sender</h2><p class="sub">ข้อมูลเหล่านี้จะถูกจัดรูปแบบให้พร้อมใช้ใน Outlook</p><div class="progress"><i></i></div><div class="wizard-fields">${field('name','ชื่อผู้ใช้งาน')}${field('role','ตำแหน่ง / แผนก')}${field('company','บริษัท',true)}${field('group','กลุ่มบริษัท')}${field('phone','Direct Line')}${field('ext','Extension')}${field('email','Email',false,'email')}${field('website','Website')}</div><div class="wizard-nav"><button class="btn" onclick="showToast('ย้อนกลับไปเลือก Template (ตัวอย่าง)')">← Back</button><button class="btn primary" onclick="showToast('บันทึกขั้นตอนที่ 2 แล้ว ไปต่อขั้นตอน Apply to Outlook')">Continue →</button></div></div><div class="wizard-preview"><div class="panel-title">Preview while you type</div><div class="preview-stage">${preview(true)}</div></div></section></section>`;
+    }
+    function renderC() {
+      return `${commonHead('Variant C · Canvas dashboard','Signature workspace','ภาพรวมสำหรับทีม IT หรือ Admin ที่ต้องดูแลหลาย Template และหลายบัญชี')}
+        <section class="canvas-layout"><div class="canvas-column"><div class="stats"><div class="stat"><strong>3</strong><span>Templates</span></div><div class="stat"><strong>2</strong><span>Default rules</span></div><div class="stat"><strong>100%</strong><span>Ready to use</span></div></div><section class="panel canvas-card"><div style="display:flex;justify-content:space-between;align-items:center"><div><h2>Signature library</h2><div class="hint" style="margin-top:4px">เลือก Template เพื่อแก้ไขหรือดูตัวอย่าง</div></div><button class="btn soft" onclick="newTemplate()">＋ Add</button></div><div class="mini-template"><div class="mini-left"><div class="mini-icon">IT</div><div><strong>IT Helpdesk</strong><small>Default · New + Reply</small></div></div><span class="badge green">Active</span></div><div class="mini-template"><div class="mini-left"><div class="mini-icon" style="color:#805d1f;background:#fff3df">SA</div><div><strong>Sales Team</strong><small>Not assigned</small></div></div><button class="small-btn" onclick="showToast('เลือก Sales Team (ตัวอย่าง)')">Edit</button></div><div class="mini-template"><div class="mini-left"><div class="mini-icon" style="color:#614f9b;background:#f0ecff">MG</div><div><strong>Management</strong><small>Not assigned</small></div></div><button class="small-btn" onclick="showToast('เลือก Management (ตัวอย่าง)')">Edit</button></div></section><section class="panel canvas-card"><div class="panel-title">Quick actions</div><div class="quick-edit"><button onclick="showToast('เปิดตัวแก้ไขข้อมูลบุคคล')">Edit contact fields</button><button onclick="showToast('เปิดตัวเลือก Logo และสี')">Brand styling</button><button onclick="showToast('เปิดการตั้งค่า Account')">Outlook accounts</button></div></section></div><section class="panel canvas-preview"><div class="panel-head"><div><div class="panel-title">IT Helpdesk · Live canvas</div><div class="hint">Default signature for ${esc(state.account)}</div></div><button class="btn primary" onclick="saveTemplate()">Apply changes</button></div><div class="preview-stage">${preview()}</div><div class="preview-foot"><span class="badge blue">New messages</span><span class="badge blue">Replies & forwards</span><button class="small-btn" onclick="copyHtml()">Copy HTML</button></div></section></section>`;
+    }
+    function render() {
+      document.getElementById('main').innerHTML = `<div class="shell">${variant === 'A' ? renderA() : variant === 'B' ? renderB() : renderC()}</div>`;
+      const meta = variants.find(v => v.key === variant);
+      document.getElementById('switcherLabel').innerHTML = `<strong>${meta.key}</strong>${meta.name}<div class="variant-note">${meta.desc}</div>`;
+      history.replaceState(null, '', `?variant=${variant}`);
+    }
+    function updateField(id, value) { state[id] = value; render(); }
+    function toggleField(id) { state[id] = !state[id]; render(); }
+    function cycle(direction) { const index = variants.findIndex(v => v.key === variant); variant = variants[(index + direction + variants.length) % variants.length].key; render(); }
+    function newTemplate() { Object.assign(state, defaults, { name: '', role: '', company: '', group: '', phone: '', ext: '', email: '', website: '' }); render(); showToast('สร้าง Template ใหม่แล้ว — เริ่มกรอกข้อมูลได้เลย'); }
+    function saveTemplate() { showToast('บันทึก Template แล้ว (Prototype ยังไม่เขียนลง Outlook จริง)'); }
+    function showToast(message) { const node = document.getElementById('toast'); node.textContent = message; node.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => node.classList.remove('show'), 2700); }
+    function copyHtml() { const html = signatureMarkup(); navigator.clipboard?.writeText(html).then(() => showToast('คัดลอก HTML Signature แล้ว')).catch(() => showToast('ตัวอย่าง: คัดลอก HTML Signature แล้ว')); }
+    document.addEventListener('keydown', event => { if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) return; if (event.key === 'ArrowLeft') cycle(-1); if (event.key === 'ArrowRight') cycle(1); });
+    render();
+  </script>
+</body>
+</html>

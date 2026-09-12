@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signature Studio — Local MVP</title>
+  <style>
+    :root { --navy:#142442; --blue:#2d6cdf; --cyan:#5dc4d6; --lime:#c8e66b; --ink:#172033; --muted:#6e7890; --line:#e2e7f0; --wash:#f4f7fb; --card:#fff; --danger:#b44955; --shadow:0 16px 42px rgba(21,36,66,.10); }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--wash); font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    button,input,textarea { font:inherit; }
+    button { cursor:pointer; }
+    .topbar { min-height:76px; padding:0 34px; display:flex; justify-content:space-between; align-items:center; color:#fff; background:var(--navy); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { width:36px; height:36px; display:grid; place-items:center; border-radius:11px; background:var(--lime); color:var(--navy); font-weight:900; }
+    .brand-name { font-size:16px; font-weight:850; }
+    .brand-sub { color:#adbad0; font-size:11px; }
+    .top-actions { display:flex; align-items:center; gap:8px; }
+    .status { display:flex; gap:7px; align-items:center; color:#d9e5fa; font-size:12px; margin-right:10px; }
+    .status i { width:7px; height:7px; border-radius:50%; background:#84d27d; }
+    .top-btn { border:1px solid #3c4e70; border-radius:9px; padding:8px 12px; color:#fff; background:transparent; }
+    .top-btn:hover { background:#243656; }
+    .app { max-width:1380px; margin:auto; padding:31px 34px 62px; }
+    .hero { display:flex; justify-content:space-between; align-items:end; gap:25px; margin-bottom:23px; }
+    .eyebrow { color:var(--blue); font-size:11px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase; }
+    h1,h2,h3,p { margin:0; }
+    h1 { margin-top:5px; font-size:28px; line-height:1.1; letter-spacing:-1px; }
+    .hero-copy { color:var(--muted); max-width:650px; margin-top:8px; }
+    .hero-actions { display:flex; gap:8px; }
+    .btn { border:1px solid var(--line); border-radius:10px; padding:10px 14px; color:var(--ink); background:#fff; font-weight:750; }
+    .btn:hover { border-color:#afc0dd; transform:translateY(-1px); }
+    .btn.primary { border-color:var(--blue); color:#fff; background:var(--blue); }
+    .btn.soft { border-color:#d6e2ff; color:#2c60bf; background:#edf3ff; }
+    .btn.danger { border-color:#f2d5d9; color:var(--danger); background:#fff7f7; }
+    .btn.small { padding:7px 10px; font-size:12px; }
+    .workspace { display:grid; grid-template-columns:235px minmax(0,1fr); gap:16px; align-items:start; }
+    .card { border:1px solid var(--line); border-radius:18px; background:var(--card); box-shadow:var(--shadow); }
+    .steps { padding:20px; }
+    .steps-title { font-weight:850; margin-bottom:12px; }
+    .step { display:flex; gap:10px; padding:13px 0; color:#8993a8; border-top:1px solid var(--line); }
+    .step:first-of-type { border-top:0; }
+    .step-no { flex:0 0 27px; height:27px; display:grid; place-items:center; border:1px solid #d6deeb; border-radius:50%; font-size:11px; font-weight:850; }
+    .step.active { color:var(--ink); }
+    .step.active .step-no { border-color:var(--blue); color:#fff; background:var(--blue); }
+    .step.done .step-no { border-color:#d7edb6; color:#4e7a2b; background:#eff8d9; }
+    .step strong { display:block; font-size:13px; }
+    .step span { display:block; margin-top:2px; font-size:11px; }
+    .account-box { margin-top:20px; padding-top:17px; border-top:1px solid var(--line); }
+    .muted { color:var(--muted); }
+    .tiny { font-size:11px; }
+    .account-name { margin-top:4px; display:block; font-weight:800; }
+    .chip { display:inline-flex; align-items:center; gap:5px; border-radius:99px; padding:4px 8px; font-size:11px; font-weight:800; }
+    .chip.green { color:#4d7c29; background:#eff8d9; }
+    .chip.blue { color:#2a5eaf; background:#eaf1ff; }
+    .chip i { width:6px; height:6px; border-radius:50%; background:currentColor; }
+    .main-card { min-width:0; overflow:hidden; }
+    .main-head { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:21px 24px; border-bottom:1px solid var(--line); }
+    .main-title { font-size:17px; font-weight:850; }
+    .main-sub { color:var(--muted); font-size:12px; margin-top:3px; }
+    .main-body { padding:24px; }
+    .template-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(205px,1fr)); gap:12px; }
+    .template-card { position:relative; min-height:142px; padding:17px; border:1px solid var(--line); border-radius:14px; background:#fff; text-align:left; }
+    .template-card:hover { border-color:#9bb7ef; box-shadow:0 8px 20px rgba(45,108,223,.10); }
+    .template-card.selected { border-color:#8eafea; background:#f7faff; box-shadow:0 0 0 3px rgba(45,108,223,.08); }
+    .template-card.selected:after { content:'✓'; position:absolute; top:12px; right:12px; width:21px; height:21px; display:grid; place-items:center; border-radius:50%; color:#fff; background:var(--blue); font-size:12px; font-weight:900; }
+    .template-icon { width:34px; height:34px; display:grid; place-items:center; border-radius:10px; color:#2b5eb1; background:#eaf2ff; font-weight:900; }
+    .template-card strong { display:block; margin-top:13px; font-size:14px; }
+    .template-card small { display:block; color:var(--muted); margin-top:3px; }
+    .template-card .template-status { margin-top:13px; }
+    .new-card { border-style:dashed; display:grid; place-items:center; color:#3766b5; background:#fbfdff; font-weight:800; }
+    .new-card .plus { font-size:27px; line-height:1; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:14px; margin-bottom:18px; }
+    .section-head h2 { font-size:21px; letter-spacing:-.4px; }
+    .section-head p { color:var(--muted); margin-top:4px; }
+    .fields { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .field.full { grid-column:1/-1; }
+    label { display:block; margin-bottom:6px; color:#5d6980; font-size:11px; font-weight:850; letter-spacing:.65px; text-transform:uppercase; }
+    input,textarea { width:100%; border:1px solid #d9e1ed; border-radius:10px; padding:10px 11px; color:var(--ink); background:#fcfdff; outline:none; }
+    input:focus,textarea:focus { border-color:#77a0e7; box-shadow:0 0 0 3px rgba(45,108,223,.12); background:#fff; }
+    textarea { min-height:55px; resize:vertical; }
+    .field-help { color:var(--muted); font-size:11px; margin-top:5px; }
+    .settings-row { display:flex; flex-wrap:wrap; gap:12px 28px; padding-top:20px; margin-top:21px; border-top:1px solid var(--line); }
+    .check { display:flex; align-items:center; gap:8px; color:#4e5a70; font-size:13px; }
+    .check input { width:16px; height:16px; accent-color:var(--blue); }
+    .form-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-top:22px; margin-top:24px; border-top:1px solid var(--line); }
+    .actions-right { display:flex; gap:8px; }
+    .review-grid { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:20px; align-items:start; }
+    .preview-wrap { padding:19px; border:1px solid var(--line); border-radius:14px; background:radial-gradient(circle at 15% 10%,#fbfdff,#edf1f7 80%); }
+    .email-window { overflow:hidden; border:1px solid #dbe2ec; border-radius:12px; background:#fff; box-shadow:0 13px 28px rgba(32,47,75,.12); }
+    .email-toolbar { height:33px; display:flex; align-items:center; padding:0 12px; border-bottom:1px solid #e9edf3; background:#f8f9fb; }
+    .traffic { width:8px; height:8px; border-radius:50%; background:#ffbf67; box-shadow:14px 0 #7ed0b5,28px 0 #b4bccb; }
+    .email-body { padding:18px; color:#334056; font:13px/1.55 Georgia,serif; }
+    .email-meta { padding-bottom:18px; color:#8a95a8; font:11px/1.4 Inter, sans-serif; }
+    .signature-preview { margin-top:22px; padding-top:11px; border-top:1px solid #cfd5df; }
+    .signature-preview .person { color:#172541; font:800 16px/1.35 Arial,sans-serif; }
+    .signature-preview .role,.signature-preview .company { color:#313a4b; font:600 13px/1.45 Arial,sans-serif; }
+    .signature-preview .contact { margin-top:13px; color:#394459; font:12px/1.65 Arial,sans-serif; }
+    .signature-preview a { color:#2658b1; text-decoration:underline; }
+    .review-side { padding:17px; border:1px solid var(--line); border-radius:14px; background:#fbfcfe; }
+    .review-side h3 { font-size:14px; }
+    .review-side p { color:var(--muted); font-size:12px; margin-top:4px; }
+    .review-list { margin:17px 0; padding:0; list-style:none; }
+    .review-list li { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); color:#5c687d; font-size:12px; }
+    .review-list li strong { color:var(--ink); text-align:right; overflow-wrap:anywhere; }
+    .side-actions { display:grid; gap:8px; }
+    .tip { padding:12px; margin-top:14px; border-radius:10px; color:#76531f; background:#fff8e9; font-size:11px; }
+    .empty { padding:30px; border:1px dashed #c9d3e3; border-radius:13px; color:var(--muted); text-align:center; }
+    .toast { position:fixed; right:28px; top:91px; z-index:10; padding:12px 15px; border-radius:11px; color:#fff; background:var(--navy); box-shadow:var(--shadow); opacity:0; transform:translateY(-8px); pointer-events:none; transition:.2s; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .modal-backdrop { position:fixed; inset:0; z-index:20; display:none; place-items:center; padding:20px; background:rgba(8,20,41,.45); }
+    .modal-backdrop.open { display:grid; }
+    .modal { width:min(100%,520px); padding:23px; border-radius:17px; background:#fff; box-shadow:0 25px 70px rgba(4,16,37,.28); }
+    .modal h2 { font-size:19px; }
+    .modal p { color:var(--muted); margin-top:7px; }
+    .modal ol { padding-left:20px; color:#4c5870; font-size:13px; }
+    .modal-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:20px; }
+    @media(max-width:900px) { .workspace{grid-template-columns:1fr}.review-grid{grid-template-columns:1fr}.steps{display:flex;gap:16px;align-items:stretch;overflow:auto}.steps-title,.account-box{display:none}.step{min-width:165px;border-top:0;border-left:1px solid var(--line);padding:6px 15px}.step:first-of-type{border-left:0}.step-no{margin-top:2px} }
+    @media(max-width:650px) { .topbar,.app{padding-left:16px;padding-right:16px}.topbar{align-items:flex-start;gap:15px;padding-top:14px;padding-bottom:14px}.top-actions{display:none}.hero{display:block}.hero-actions{margin-top:15px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.main-head,.main-body{padding:18px}.form-actions{align-items:stretch;flex-direction:column}.actions-right{justify-content:stretch}.actions-right .btn{flex:1}.template-grid{grid-template-columns:1fr 1fr} }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">S</div><div><div class="brand-name">Signature Studio</div><div class="brand-sub">Local MVP · Outlook signature manager</div></div></div>
+    <div class="top-actions"><div class="status"><i></i> Saved on this device</div><button class="top-btn" onclick="openImport()">Import</button><button class="top-btn" onclick="exportTemplates()">Export</button></div>
+  </header>
+  <main class="app">
+    <div class="hero"><div><div class="eyebrow">Guided setup · Variant B</div><h1>Build your signature</h1><p class="hero-copy">สร้าง Signature ให้เสร็จใน 3 ขั้นตอน แล้วคัดลอกไปใช้ใน Outlook ได้ทันที ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้</p></div><div class="hero-actions"><button class="btn" onclick="newTemplate()">＋ New template</button><button class="btn primary" onclick="goStep(3)">Review & export →</button></div></div>
+    <section class="workspace">
+      <aside class="card steps"><div class="steps-title">Setup progress</div><div class="step" data-step="1"><div class="step-no">1</div><div><strong>Choose template</strong><span>เลือกแบบ Signature</span></div></div><div class="step" data-step="2"><div class="step-no">2</div><div><strong>Your details</strong><span>กรอกข้อมูลผู้ส่ง</span></div></div><div class="step" data-step="3"><div class="step-no">3</div><div><strong>Review & export</strong><span>ตรวจสอบและนำไปใช้</span></div></div><div class="account-box"><div class="muted tiny">Current account</div><span class="account-name">IT Helpdesk</span><span class="chip green" style="margin-top:9px"><i></i> Ready to use</span></div></aside>
+      <section class="card main-card"><div id="view"></div></section>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+  <div id="modal" class="modal-backdrop"><div class="modal"><h2>นำ Signature ไปใช้ใน Outlook</h2><p>สำหรับ Classic Outlook สามารถดาวน์โหลด Installer เพื่อวางไฟล์และตั้งค่าเริ่มต้นอัตโนมัติได้ ส่วน New Outlook ใช้วิธีคัดลอกไปวางในหน้า Settings</p><ol><li>ถ้าใช้ Classic Outlook 2010 ขึ้นไป ให้กด <strong>Download Classic Outlook installer</strong> ในขั้นตอน Review</li><li>เปิด PowerShell ในโฟลเดอร์ Downloads แล้วรันไฟล์ Installer ที่ดาวน์โหลด</li><li>ถ้าใช้ New Outlook หรือ Outlook Web ให้กด <strong>Copy rendered signature</strong></li><li>เปิด Settings → Mail → Compose and reply หรือ Signatures แล้ววางด้วย Ctrl+V</li></ol><div class="modal-actions"><button class="btn" onclick="closeModal()">ปิด</button><button class="btn primary" onclick="copyRendered();closeModal()">Copy rendered signature</button></div></div></div>
+  <input id="importInput" type="file" accept="application/json" hidden />
+  <script>
+    const STORAGE_KEY = 'signature-studio.templates.v1';
+    const emptyTemplate = () => ({ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), name:'New Signature', greeting:'Best regards,', senderName:'', role:'', company:'', group:'', phone:'', ext:'', mobile:'', email:'', website:'', defaultNew:false, defaultReply:false });
+    const seedTemplates = [
+      { id:'it-helpdesk', name:'IT Helpdesk', greeting:'Best regards,', senderName:'IT Helpdesk (BIT)', role:'Helpdesk & Service', company:'Belton Industrial (Thailand) Ltd. - Navanakorn & Rojana', group:'Belton Technology Group', phone:'(66) 2529 7300', ext:'830-1313/831-3313', mobile:'', email:'bit-it.helpdesk@beltontechnology.com', website:'www.beltontechnology.com', defaultNew:true, defaultReply:true },
+      { id:'sales', name:'Sales Team', greeting:'Best regards,', senderName:'Sales Team', role:'Sales Department', company:'Belton Industrial (Thailand) Ltd.', group:'Belton Technology Group', phone:'', ext:'', mobile:'', email:'', website:'www.beltontechnology.com', defaultNew:false, defaultReply:false },
+      { id:'management', name:'Management', greeting:'Best regards,', senderName:'', role:'', company:'Belton Industrial (Thailand) Ltd.', group:'Belton Technology Group', phone:'', ext:'', mobile:'', email:'', website:'www.beltontechnology.com', defaultNew:false, defaultReply:false }
+    ];
+    const fieldDefs = [
+      ['senderName','ชื่อผู้ใช้งาน',''], ['role','ตำแหน่ง / แผนก',''], ['company','บริษัท','full'], ['group','กลุ่มบริษัท',''], ['phone','Direct Line',''], ['ext','Extension',''], ['mobile','Mobile',''], ['email','Email','email'], ['website','Website','']
+    ];
+    let templates = loadTemplates();
+    let selectedId = templates[0]?.id;
+    let step = 1;
+    let toastTimer;
+
+    function loadTemplates() { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : structuredClone(seedTemplates); } catch { return structuredClone(seedTemplates); } }
+    function saveTemplates() { localStorage.setItem(STORAGE_KEY, JSON.stringify(templates)); }
+    function current() { return templates.find(t => t.id === selectedId) || templates[0]; }
+    function esc(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function safeUrl(url) { const value = String(url || '').trim(); return /^https?:\/\//i.test(value) ? value : `https://${value}`; }
+    function signatureHtml(t = current()) {
+      const linkEmail = t.email ? `<a href="mailto:${esc(t.email)}" style="color:#2658b1;text-decoration:underline">${esc(t.email)}</a>` : '';
+      const linkWeb = t.website ? `<a href="${esc(safeUrl(t.website))}" style="color:#2658b1;text-decoration:underline">${esc(t.website)}</a>` : '';
+      const contact = [t.phone ? `Direct Line: ${esc(t.phone)}` : '', t.ext ? `Ext.: ${esc(t.ext)}` : ''].filter(Boolean).join(' &nbsp;|&nbsp; ');
+      const mobile = t.mobile ? `Mobile: ${esc(t.mobile)}` : '';
+      const identity = `${esc(t.senderName)}${t.role ? ` <span style="font-weight:400;color:#313a4b">| ${esc(t.role)}</span>` : ''}${t.company ? ` <span style="font-weight:400;color:#313a4b">| ${esc(t.company)}</span>` : ''}`;
+      return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,sans-serif;font-size:12px;line-height:1.55;color:#394459;border-top:1px solid #cfd5df;padding-top:10px"><tr><td style="padding-top:10px"><div style="font-family:Georgia,serif;color:#334056;margin-bottom:3px">${esc(t.greeting)}</div><div style="font-size:16px;font-weight:800;color:#172541">${identity}</div>${t.group ? `<div style="font-weight:600;color:#313a4b;margin-top:11px">${esc(t.group)}</div>` : ''}<div style="margin-top:11px">${contact}${contact && mobile ? '<br>' : ''}${mobile}${(contact || mobile) && linkEmail ? '<br>' : ''}${linkEmail ? `Email: ${linkEmail}` : ''}${linkWeb ? `<br>Website: ${linkWeb}` : ''}</div></td></tr></table>`;
+    }
+    function previewHtml() { const t = current(); return `<div class="email-window"><div class="email-toolbar"><span class="traffic"></span></div><div class="email-body"><div class="email-meta">To: customer@example.com<br>Subject: Service request follow-up</div><div>Hello,</div><div style="margin-top:6px">Thank you for contacting our support team. We will get back to you shortly.</div><div class="signature-preview">${signatureHtml(t).replace('style="font-family:', 'style="width:100%;font-family:')}</div></div></div>`; }
+    function render() {
+      document.querySelectorAll('.step').forEach(node => { const n = Number(node.dataset.step); node.classList.toggle('active', n === step); node.classList.toggle('done', n < step); });
+      document.getElementById('view').innerHTML = step === 1 ? renderTemplates() : step === 2 ? renderDetails() : renderReview();
+      updatePreviewOnly();
+    }
+    function renderTemplates() {
+      const cards = templates.map(t => `<button class="template-card ${t.id === selectedId ? 'selected' : ''}" onclick="selectTemplate('${esc(t.id)}')"><span class="template-icon">${esc((t.name || 'S').slice(0,2).toUpperCase())}</span><strong>${esc(t.name)}</strong><small>${t.defaultNew || t.defaultReply ? 'Default signature' : 'Not assigned'}</small><span class="template-status chip ${t.defaultNew || t.defaultReply ? 'green':'blue'}">${t.defaultNew || t.defaultReply ? 'Active':'Available'}</span></button>`).join('');
+      return `<div class="main-head"><div><div class="main-title">Step 1 · Choose a template</div><div class="main-sub">เลือก Signature ที่ต้องการแก้ไข หรือสร้างแบบใหม่สำหรับทีม</div></div><span class="chip blue">${templates.length} templates</span></div><div class="main-body"><div class="section-head"><div><h2>Signature library</h2><p>เลือก Template เพื่อไปกรอกข้อมูลในขั้นตอนถัดไป</p></div><button class="btn soft small" onclick="newTemplate()">＋ Add template</button></div><div class="template-grid">${cards}<button class="template-card new-card" onclick="newTemplate()"><span class="plus">＋</span><span style="margin-top:8px">Create new template</span></button></div><div class="form-actions"><span class="muted tiny">Template ที่เลือก: <strong>${esc(current()?.name || 'ยังไม่ได้เลือก')}</strong></span><div class="actions-right"><button class="btn danger small" onclick="deleteTemplate()" ${templates.length <= 1 ? 'disabled':''}>Delete</button><button class="btn primary" onclick="goStep(2)">Continue →</button></div></div></div>`;
+    }
+    function inputField(id,label,type='text',full='') { const t = current() || {}; return `<div class="field ${full === 'full' ? 'full':''}"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(t[id])}" oninput="updateField('${id}', this.value)" /></div>`; }
+    function renderDetails() {
+      const t = current() || emptyTemplate();
+      return `<div class="main-head"><div><div class="main-title">Step 2 · Your details</div><div class="main-sub">ข้อมูลจะถูกจัดรูปแบบเป็น HTML ที่เหมาะกับการวางใน Outlook</div></div><span class="chip green"><i></i> Auto preview</span></div><div class="main-body"><div class="section-head"><div><h2>${esc(t.name)}</h2><p>แก้ไขข้อมูลผู้ส่งและตรวจสอบ Preview ด้านขวาในขั้นตอน Review</p></div><button class="btn small" onclick="renameTemplate()">Rename template</button></div><div class="fields"><div class="field full"><label for="greeting">คำขึ้นต้น</label><input id="greeting" value="${esc(t.greeting)}" oninput="updateField('greeting', this.value)" /></div>${fieldDefs.map(([id,label,type]) => inputField(id,label,type === 'email' ? 'email' : 'text',type === 'full' ? 'full':'')).join('')}</div><div class="settings-row"><label class="check"><input type="checkbox" ${t.defaultNew ? 'checked':''} onchange="updateField('defaultNew', this.checked)" /> Use for new messages</label><label class="check"><input type="checkbox" ${t.defaultReply ? 'checked':''} onchange="updateField('defaultReply', this.checked)" /> Use for replies & forwards</label></div><div class="form-actions"><button class="btn" onclick="goStep(1)">← Back</button><div class="actions-right"><button class="btn soft" onclick="saveAndToast()">Save draft</button><button class="btn primary" onclick="goStep(3)">Review & export →</button></div></div></div>`;
+    }
+    function renderReview() {
+      const t = current() || {};
+      return `<div class="main-head"><div><div class="main-title">Step 3 · Review & export</div><div class="main-sub">ตรวจสอบหน้าตา Signature ก่อนนำไปใช้ใน Outlook</div></div><span class="chip green"><i></i> Ready</span></div><div class="main-body"><div class="review-grid"><div><div class="section-head"><div><h2>Live preview</h2><p>ตัวอย่างในหน้าต่าง New message</p></div><span class="chip blue">HTML</span></div><div class="preview-wrap" id="preview">${previewHtml()}</div></div><aside class="review-side"><h3>${esc(t.name)}</h3><p>ตรวจสอบข้อมูลก่อน Export</p><ul class="review-list"><li><span>Name</span><strong>${esc(t.senderName || '—')}</strong></li><li><span>Role</span><strong>${esc(t.role || '—')}</strong></li><li><span>Mobile</span><strong>${esc(t.mobile || '—')}</strong></li><li><span>Email</span><strong>${esc(t.email || '—')}</strong></li><li><span>New message</span><strong>${t.defaultNew ? 'Default':'Off'}</strong></li><li><span>Reply/forward</span><strong>${t.defaultReply ? 'Default':'Off'}</strong></li></ul><div class="side-actions"><button class="btn primary" onclick="copyRendered()">Copy rendered signature</button><button class="btn" onclick="downloadCurrent()">Download HTML</button><button class="btn" onclick="downloadInstaller()">Download Classic Outlook installer</button><button class="btn soft" onclick="openModal()">How to use in Outlook</button></div><div class="tip">Classic Outlook 2010–Microsoft 365 ใช้ Installer นี้ได้โดยไม่ต้องใช้สิทธิ์ Administrator และจะสำรองไฟล์เดิมก่อนเขียน</div></aside></div><div class="form-actions"><button class="btn" onclick="goStep(2)">← Edit details</button><button class="btn primary" onclick="saveAndToast()">Save signature</button></div></div>`;
+    }
+    function goStep(next) { if (!current()) newTemplate(false); step = Math.max(1, Math.min(3,next)); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+    function selectTemplate(id) { selectedId = id; step = 1; render(); }
+    function newTemplate(go = true) { const t = emptyTemplate(); templates.push(t); selectedId = t.id; saveTemplates(); step = go ? 2 : 1; render(); showToast('สร้าง Template ใหม่แล้ว'); }
+    function renameTemplate() { const t = current(); const name = prompt('ตั้งชื่อ Template ใหม่', t.name); if (name?.trim()) { t.name = name.trim(); saveTemplates(); render(); showToast('เปลี่ยนชื่อ Template แล้ว'); } }
+    function deleteTemplate() { if (templates.length <= 1) return; const t = current(); if (!confirm(`ลบ Template “${t.name}” หรือไม่?`)) return; templates = templates.filter(x => x.id !== selectedId); selectedId = templates[0].id; saveTemplates(); step = 1; render(); showToast('ลบ Template แล้ว'); }
+    function updateField(id,value) { const t = current(); if (!t) return; t[id] = value; saveTemplates(); updatePreviewOnly(); }
+    function updatePreviewOnly() { const node = document.getElementById('preview'); if (node) node.innerHTML = previewHtml(); }
+    function saveAndToast() { saveTemplates(); showToast('บันทึกข้อมูลไว้ในเครื่องนี้แล้ว'); }
+    function showToast(message) { const node = document.getElementById('toast'); node.textContent = message; node.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => node.classList.remove('show'), 2600); }
+    async function copyRendered() { const html = signatureHtml(); const t = current(); const text = [t.senderName,t.role,t.company,t.group,t.phone,t.ext,t.mobile,t.email,t.website].filter(Boolean).join('\n'); try { if (window.ClipboardItem && navigator.clipboard?.write) { await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})]); } else { await navigator.clipboard.writeText(text); } showToast('คัดลอก Signature แล้ว — พร้อมวางใน Outlook'); } catch { showToast('ไม่สามารถเข้าถึง Clipboard ได้ ให้ใช้ปุ่ม Download HTML แทน'); } }
+    function downloadCurrent() { const blob = new Blob([signatureHtml()], {type:'text/html'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${(current().name || 'signature').replace(/[^a-z0-9ก-๙_-]+/gi,'-')}.html`; a.click(); URL.revokeObjectURL(a.href); showToast('ดาวน์โหลด HTML Signature แล้ว'); }
+    function toBase64(value) { const bytes = new TextEncoder().encode(value); let binary = ''; for (const byte of bytes) binary += String.fromCharCode(byte); return btoa(binary); }
+    function downloadInstaller() {
+      const t = current(); const name = (t.name || 'Signature').replace(/'/g, "''"); const encoded = toBase64(signatureHtml(t));
+      const script = `# Signature Studio installer — Classic Outlook 2010+
+# Run as the signed-in Windows user. No administrator rights are required.
+$ErrorActionPreference = 'Stop'
+$signatureName = '${name}'
+$encodedHtml = '${encoded}'
+$root = Join-Path $env:APPDATA 'Microsoft\\Signatures'
+New-Item -ItemType Directory -Path $root -Force | Out-Null
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$backup = Join-Path $root ("_SignatureStudioBackup\\$stamp-$($signatureName -replace '[^a-zA-Z0-9_-]', '-')")
+$existing = Get-ChildItem -LiteralPath $root -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name.StartsWith($signatureName, [StringComparison]::OrdinalIgnoreCase) }
+if ($existing) { New-Item -ItemType Directory -Path $backup -Force | Out-Null; $existing | Copy-Item -Destination $backup -Recurse -Force }
+$bytes = [Convert]::FromBase64String($encodedHtml)
+$html = [Text.Encoding]::UTF8.GetString($bytes)
+$base = Join-Path $root $signatureName
+[IO.File]::WriteAllText("$base.htm", $html, [Text.Encoding]::UTF8)
+$plain = [Regex]::Replace($html, '<[^>]+>', ' ')
+$plain = [Net.WebUtility]::HtmlDecode($plain) -replace '\\s+', ' '
+[IO.File]::WriteAllText("$base.txt", $plain.Trim(), [Text.Encoding]::UTF8)
+$versions = '14.0','15.0','16.0'
+$found = $false
+foreach ($version in $versions) {
+  $office = "HKCU:\\Software\\Microsoft\\Office\\$version"
+  if ((Test-Path $office) -or $version -eq '16.0') {
+    $mail = "$office\\Common\\MailSettings"
+    New-Item -Path $mail -Force | Out-Null
+    New-ItemProperty -Path $mail -Name NewSignature -Value $signatureName -PropertyType String -Force | Out-Null
+    New-ItemProperty -Path $mail -Name ReplySignature -Value $signatureName -PropertyType String -Force | Out-Null
+    $found = $true
+  }
+}
+Write-Host "Installed: $signatureName"
+Write-Host "Location: $root"
+if ($found) { Write-Host 'Default signature set for Classic Outlook (New + Reply/Forward).' }
+if ($existing) { Write-Host "Backup: $backup" }
+Read-Host 'Press Enter to close'`;
+      const blob = new Blob([script], {type:'text/plain;charset=utf-8'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${(t.name || 'signature').replace(/[^a-z0-9ก-๙_-]+/gi,'-')}-install.ps1`; a.click(); URL.revokeObjectURL(a.href); showToast('ดาวน์โหลด Classic Outlook Installer แล้ว');
+    }
+    function exportTemplates() { const blob = new Blob([JSON.stringify(templates,null,2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'signature-templates.json'; a.click(); URL.revokeObjectURL(a.href); showToast('Export Templates แล้ว'); }
+    function openImport() { document.getElementById('importInput').click(); }
+    document.getElementById('importInput').addEventListener('change', event => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); if (!Array.isArray(data) || !data.length) throw new Error(); templates = data; selectedId = templates[0].id; saveTemplates(); step = 1; render(); showToast('Import Templates แล้ว'); } catch { showToast('ไฟล์ Import ไม่ถูกต้อง'); } event.target.value = ''; }; reader.readAsText(file); });
+    function openModal() { document.getElementById('modal').classList.add('open'); }
+    function closeModal() { document.getElementById('modal').classList.remove('open'); }
+    document.getElementById('modal').addEventListener('click', event => { if (event.target.id === 'modal') closeModal(); });
+    render();
+  </script>
+</body>
+</html>
