@@ -22,11 +22,11 @@ The portable executable is created at `dist\SignatureStudio.exe`.
 
 The app writes only to the signed-in user's `%APPDATA%\Microsoft\Signatures` folder and `HKCU` Office settings. Existing same-name files are copied to `_SignatureStudioBackup` before replacement.
 
-For Outlook 2010, the app also registers the user Signature folder under Office 14.0 so the Signature command and automatic insertion can be recognized after Outlook is restarted.
+For Outlook 2010, the app keeps the Signature command visible and does not write external default values that can hide the button. Choose the generated signature once in `File > Options > Mail > Signatures`.
 
 The generated signature uses `<div>` elements only; it does not use HTML tables, so Outlook should not open the contextual Table Tools ribbon when the signature is selected.
 
-For Outlook 2010 specifically, the app does not write `NewSignature` or `ReplySignature` defaults because external Registry defaults can hide the Signature command. It removes only those two values from the user's Office 14.0 profile, leaves the generated files ready, and lets the user choose the default once in Outlook. Newer Office versions continue to receive automatic defaults as `REG_EXPAND_SZ`.
+For Outlook 2010 specifically, the app removes only the two external default values from the user's Office 14.0 profile, leaves the generated files ready, and lets the user choose the default once in Outlook. Newer Office versions receive automatic defaults as `REG_EXPAND_SZ`.
 
 The app does not modify Ribbon customization or machine-level policy values.
 

@@ -20,7 +20,7 @@ Status: implementation-complete (native MVP build verified)
 
 - [Guided Wizard UI](../../signature-studio.html): the selected interaction is a three-step flow with live preview and export/install actions.
 - [Classic Outlook compatibility research](../outlook-compatibility-research.md): the first integration path targets the local Signature store and version-aware user settings.
-- [User-confirmed first-release scope](../../CONTEXT.md): C# WPF Portable GUI, Classic Outlook 2010+, Set Signature for New + Reply/Forward, no Logo in v1.
+- [User-confirmed first-release scope](../../CONTEXT.md): C# WPF Portable GUI, Classic Outlook 2010+, generated Signature files with Outlook 2010-safe default selection, no Logo in v1.
 
 ## Not yet specified
 
